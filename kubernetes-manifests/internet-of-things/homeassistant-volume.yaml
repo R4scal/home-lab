@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: homeassistant-data-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+    - timeo=60
+    - retrans=10
+  capacity:
+    storage: 1Gi
+  nfs:
+    server: ""
+    path: ""
+  persistentVolumeReclaimPolicy: "Retain"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homeassistant-data-pvc
+  namespace: internet-of-things
+spec:
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: "homeassistant-data-pv"
+  storageClassName: ""

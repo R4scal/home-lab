@@ -1,0 +1,103 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: network-tools
+  name: unbound
+  labels:
+    app.kubernetes.io/name: unbound
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unbound
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unbound
+      annotations:
+        prometheus.io/port: "9167"
+        prometheus.io/scrape: "true"
+    spec:
+      initContainers:
+        - name: unbound-control-setup
+          image: "rascal/unbound:1.9.6"
+          command:
+           - /usr/sbin/unbound-control-setup
+           - -d
+           - /control
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: control-volume
+              mountPath: /control
+      containers:
+        - name: unbound
+          image: "rascal/unbound:1.9.6"
+          args:
+          - -c
+          - /config/unbound.conf
+          ports:
+            - name: dns-udp
+              containerPort: 8053
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 8053
+              protocol: TCP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: control-volume
+              mountPath: /control
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 64Mi
+        - name: unbound-exporter
+          image: "rascal/unbound_exporter:v0.2.1"
+          args:
+          - --unbound.host=unix:/control/unbound.control.sock
+          - --unbound.ca=/control/unbound_server.pem
+          - --unbound.cert=/control/unbound_control.pem
+          - --unbound.key=/control/unbound_control.key
+          ports:
+            - name: metrics
+              containerPort: 9167
+              protocol: TCP
+          volumeMounts:
+            - name: control-volume
+              mountPath: /control
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 9167
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 9167
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+      volumes:
+        - name: config-volume
+          configMap:
+            name: unbound-config
+        - name: control-volume
+          emptyDir: {}

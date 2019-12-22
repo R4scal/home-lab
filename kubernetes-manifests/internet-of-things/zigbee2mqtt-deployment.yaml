@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zigbee2mqtt
+  namespace: internet-of-things
+  labels:
+    app.kubernetes.io/name: zigbee2mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zigbee2mqtt
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zigbee2mqtt
+    spec:
+      containers:
+        - name: zigbee2mqtt
+          image: "koenkk/zigbee2mqtt:1.8.0"
+          resources:
+            limits:
+              cpu: 250m
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /app/data
+              name: zigbee2mqtt-data
+            - mountPath: /app/data/configuration.yaml
+              name: zigbee2mqtt-config
+              subPath: configuration.yaml
+            - mountPath: /app/data/log
+              name: zigbee2mqtt-log
+            - mountPath: /dev/ttyACM0
+              name: dev-tty
+          securityContext:
+            privileged: true
+      tolerations:
+      - key: "hardware/zigbee"
+        operator: Exists
+        effect: "NoSchedule"
+      nodeSelector:
+        "kubernetes.io/arch": "arm"
+      volumes:
+        - name: zigbee2mqtt-config
+          configMap:
+            name: zigbee2mqtt-config
+        - name: zigbee2mqtt-data
+          persistentVolumeClaim:
+            claimName: zigbee2mqtt-data-pvc
+        - name: zigbee2mqtt-log
+          hostPath:
+            path: /var/log/zigbee2mqtt
+            type: DirectoryOrCreate
+        - name: dev-tty
+          hostPath:
+            path: /dev/ttyACM0
+            type: CharDevice
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

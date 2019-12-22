@@ -1,0 +1,73 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: traefik
+  name: traefik
+  labels:
+    app.kubernetes.io/name: traefik
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: traefik
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      containers:
+        - name: traefik
+          image: traefik:v2.1.1
+          args:
+            - --api.dashboard=true
+            - --api.insecure
+            - --ping=true
+            - --metrics=true
+            - --metrics.prometheus=true
+            - --accesslog
+            - --entrypoints.http.Address=:8000
+            - --entryPoints.http.forwardedHeaders.trustedIPs=$(CLOUDFLARE_IPS)
+            - --entrypoints.https.Address=:4443
+            - --entryPoints.https.forwardedHeaders.trustedIPs=$(CLOUDFLARE_IPS)
+            - --providers.kubernetescrd
+            - --serversTransport.insecureSkipVerify=true
+          ports:
+            - name: http
+              containerPort: 8000
+            - name: https
+              containerPort: 4443
+            - name: admin
+              containerPort: 8080
+          env:
+          - name: CLOUDFLARE_IPS
+            value: "173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10

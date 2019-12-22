@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: unbound
+  namespace: network-tools
+  labels:
+    app.kubernetes.io/name: unbound
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: unbound
+  ports:
+    - name: dns-udp
+      port: 53
+      protocol: UDP
+      targetPort: dns-udp
