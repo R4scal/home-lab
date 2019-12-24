@@ -14,9 +14,6 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: eclipse-mosquitto
-      annotations:
-        prometheus.io/port: "9234"
-        prometheus.io/scrape: "true"
     spec:
       containers:
         - name: mosquitto-exporter

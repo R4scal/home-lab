@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: unbound
+  labels:
+    k8s-app: unbound
+  namespace: monitoring
+spec:
+  jobLabel: unbound
+  namespaceSelector:
+    matchNames:
+    - network-tools
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unbound
+  podMetricsEndpoints:
+  - port: metrics

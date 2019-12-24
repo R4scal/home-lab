@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: eclipse-mosquitto
+  labels:
+    k8s-app: eclipse-mosquitto
+  namespace: monitoring
+spec:
+  jobLabel: eclipse-mosquitto
+  namespaceSelector:
+    matchNames:
+    - internet-of-things
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eclipse-mosquitto
+  podMetricsEndpoints:
+  - port: http

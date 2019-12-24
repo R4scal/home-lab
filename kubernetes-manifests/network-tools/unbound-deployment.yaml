@@ -14,9 +14,6 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: unbound
-      annotations:
-        prometheus.io/port: "9167"
-        prometheus.io/scrape: "true"
     spec:
       initContainers:
         - name: unbound-control-setup
