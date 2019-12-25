@@ -28,9 +28,6 @@ spec:
           volumeMounts:
             - mountPath: /app/data
               name: zigbee2mqtt-data
-            - mountPath: /app/data/configuration.yaml
-              name: zigbee2mqtt-config
-              subPath: configuration.yaml
             - mountPath: /app/data/log
               name: zigbee2mqtt-log
             - mountPath: /dev/ttyACM0
@@ -44,9 +41,6 @@ spec:
       nodeSelector:
         "kubernetes.io/arch": "arm"
       volumes:
-        - name: zigbee2mqtt-config
-          configMap:
-            name: zigbee2mqtt-config
         - name: zigbee2mqtt-data
           persistentVolumeClaim:
             claimName: zigbee2mqtt-data-pvc

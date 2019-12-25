@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-main
+  namespace: warehouse
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+  serviceName: "postgresql"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgresql
+    spec:
+      terminationGracePeriodSeconds: 10
+#      securityContext:
+#        runAsUser: 22
+#        runAsGroup: 70
+#        fsGroup: 1024
+      containers:
+      - name: postgres
+        image: "postgres:12.1-alpine"
+        ports:
+        - containerPort: 5432
+          name: pqsql
+        env:
+          - name: POSTGRES_INITDB_ARGS
+            value: "--data-checksums"
+          - name: PGDATA
+            value: "/data/db"
+          - name: POSTGRES_INITDB_WALDIR
+            value: "/data/wal"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgresql-creds
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgresql-creds
+                key: password
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 4Gi
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /data
+      nodeSelector:
+         "kubernetes.io/arch": "amd64" 
+      volumes:
+        - name: postgresql-data
+#          persistentVolumeClaim:
+#            claimName: postgresql-data-pvc
+          hostPath:
+           path: /var/lib/postgresql/12
+           type: DirectoryOrCreate
