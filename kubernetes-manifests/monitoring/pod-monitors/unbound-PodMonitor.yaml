@@ -6,7 +6,7 @@ metadata:
     k8s-app: unbound
   namespace: monitoring
 spec:
-  jobLabel: k8s-app
+  jobLabel: app.kubernetes.io/name
   namespaceSelector:
     matchNames:
     - network-tools

@@ -6,7 +6,7 @@ metadata:
     k8s-app: eclipse-mosquitto
   namespace: monitoring
 spec:
-  jobLabel: k8s-app
+  jobLabel: app.kubernetes.io/name
   namespaceSelector:
     matchNames:
     - internet-of-things
