@@ -30,3 +30,53 @@ stringData:
       - source_labels: [__meta_kubernetes_pod_name]
         action: replace
         target_label: pod
+    - job_name: 'snmp-exporter/0'
+      metrics_path: /snmp
+      consul_sd_configs:
+      - server: 'agent.consul.svc.cluster.local:8500'
+        scheme: 'http'
+      relabel_configs:
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,prometheus.io/snmp,.*'
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,module=([^,]+),.*'
+        replacement: '${1}'
+        target_label: __param_module
+      - source_labels: [__meta_consul_node]
+        target_label: host
+      - source_labels: [__meta_consul_address]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__param_module]
+        target_label: job
+      - target_label: __address__
+        replacement: snmp-exporter.monitoring.svc.cluster.local:9116
+    - job_name: 'snmp-exporter/1'
+      metrics_path: /snmp
+      params:
+        module: [if_mib]
+      consul_sd_configs:
+      - server: 'agent.consul.svc.cluster.local:8500'
+        scheme: 'http'
+      relabel_configs:
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,prometheus.io/snmp,.*'
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,module=(mikrotik|synology|zyxel),.*'
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_consul_node]
+        target_label: host
+      - source_labels: [__meta_consul_address]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__param_module]
+        target_label: job
+      - target_label: __address__
+        replacement: snmp-exporter.monitoring.svc.cluster.local:9116

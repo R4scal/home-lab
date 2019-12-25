@@ -6,7 +6,7 @@ metadata:
     k8s-app: unbound
   namespace: monitoring
 spec:
-  jobLabel: unbound
+  jobLabel: k8s-app
   namespaceSelector:
     matchNames:
     - network-tools

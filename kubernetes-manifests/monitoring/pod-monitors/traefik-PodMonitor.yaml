@@ -6,7 +6,7 @@ metadata:
     k8s-app: traefik
   namespace: monitoring
 spec:
-  jobLabel: traefik
+  jobLabel: k8s-app
   namespaceSelector:
     matchNames:
     - traefik
