@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: consul-exporter
+  name: consul-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: consul-exporter
+    spec:
+      containers:
+      - args:
+        - --consul.allow_stale
+        - --consul.server=$(CONSUL_HTTP_ADDR)
+        image: "prom/consul-exporter:v0.6.0"
+        name: consul-exporter
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 9107
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: CONSUL_HTTP_ADDR
+          value: $(HOST_IP):8500

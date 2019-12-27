@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cert-manager
+  labels:
+    k8s-app: cert-manager
+  namespace: monitoring
+spec:
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+    - cert-manager
+  selector:
+    matchLabels:
+      app: cert-manager
+  endpoints:
+  - targetPort: 9402
+    interval: 30s

@@ -42,9 +42,6 @@ spec:
       labels:
         k8s-app: kube-router
         tier: node
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
     spec:
       priorityClassName: system-node-critical
       serviceAccountName: kube-router
