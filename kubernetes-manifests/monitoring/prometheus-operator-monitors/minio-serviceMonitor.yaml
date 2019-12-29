@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: minio-nas
+  labels:
+    k8s-app: minio
+  namespace: monitoring
+spec:
+  jobLabel: app.kubernetes.io/name
+  namespaceSelector:
+    matchNames:
+    - minio
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: minio
+      minio.kubernetes.io/tenant: nas
+  endpoints:
+  - port: http
+    path: /minio/prometheus/metrics
+    interval: 30s
+    bearerTokenSecret: 
+      name: prometheus-tokens
+      key: minio-nas
