@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: pgadmin
+  name: pgadmin
+  namespace: warehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pgadmin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pgadmin
+    spec:
+      containers:
+      - image: "dpage/pgadmin4:4.16"
+        name: pgadmin
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: pgadmin-default-creds
+              key: username
+        - name: PGADMIN_DEFAULT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pgadmin-default-creds
+              key: password
+        - name: PGADMIN_CONFIG_SESSION_DB_PATH
+          value: "'/dev/shm/pgAdmin4_session'"
+        - name: PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION
+          value: "False"
+        - name: PGADMIN_CONFIG_SQLITE_TIMEOUT
+          value: "3000"
+        - name: PGADMIN_CONFIG_ALLOW_SAVE_PASSWORD
+          value: "False"
+        volumeMounts:
+        - name: pgadmin-data
+          mountPath: /var/lib/pgadmin
+      nodeSelector:
+        "kubernetes.io/arch": "amd64"
+      volumes:
+      - name: pgadmin-data
+        persistentVolumeClaim:
+          claimName: pgadmin-data-pvc
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"
