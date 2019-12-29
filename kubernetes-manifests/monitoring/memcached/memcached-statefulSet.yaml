@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: memcached
+  name: memcached
+  namespace: monitoring
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: memcached
+  serviceName: memcached
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: memcached
+    spec:
+      containers:
+      - name: memcached
+        image: memcached:1.5.20-alpine
+        command:
+        - memcached
+        - -m 128
+        - -o
+        - modern
+        - -v
+        ports:
+        - name: memcache
+          containerPort: 11211
+        livenessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: memcache
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 144Mi
+      - name: memcached-exporter
+        image: quay.io/prometheus/memcached-exporter:v0.6.0
+        ports:
+         - name: http
+           containerPort: 9150
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
+  updateStrategy:
+    type: RollingUpdate

@@ -14,12 +14,14 @@ spec:
   baseImage: quay.io/prometheus/prometheus
   nodeSelector:
     kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
   replicas: 1
   resources:
     requests:
-      memory: 400Mi
+      cpu: 500m
+      memory: 512Mi
   ruleSelector:
     matchLabels:
       prometheus: k8s
@@ -37,3 +39,12 @@ spec:
     name: prometheus-scrape-configs
     key: prometheus-additional.yaml
   version: v2.15.1
+  thanos:
+    image: "quay.io/thanos/thanos:v0.9.0"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    objectStorageConfig:
+      name: thanos-config
+      key: objstore-config

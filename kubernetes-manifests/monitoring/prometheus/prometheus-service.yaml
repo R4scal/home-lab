@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     prometheus: k8s
+    thanos-component: thanos-sidecar
   name: prometheus-k8s
   namespace: monitoring
 spec:
@@ -10,6 +11,12 @@ spec:
   - name: web
     port: 9090
     targetPort: web
+  - name: grpc
+    port: 10901
+    targetPort: 10901
+  - name: thanos
+    port: 10902
+    targetPort: 10902
   selector:
     app: prometheus
     prometheus: k8s

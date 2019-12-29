@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: thanos
+    thanos-component: thanos-store
+  name: thanos-store
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thanos
+      thanos-component: thanos-store
+  serviceName: thanos-store
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thanos
+        thanos-component: thanos-store
+    spec:
+      containers:
+      - args:
+        - store
+        - --data-dir=/var/lib/thanos/store
+        - --grpc-address=0.0.0.0:10901
+        - --http-address=0.0.0.0:10902
+        - --objstore.config=$(OBJSTORE_CONFIG)
+        env:
+        - name: OBJSTORE_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: thanos-config
+              key: objstore-config
+        image: quay.io/thanos/thanos:v0.9.0
+        livenessProbe:
+          failureThreshold: 4
+          httpGet:
+            path: /-/healthy
+            port: http
+            scheme: HTTP
+          periodSeconds: 30
+        name: thanos-store
+        ports:
+        - containerPort: 10901
+          name: grpc
+        - containerPort: 10902
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 250m
+            memory: 2Gi
+        volumeMounts:
+        - mountPath: /var/lib/thanos/store
+          name: thanos-store-data
+          readOnly: false
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64
+      terminationGracePeriodSeconds: 120
+      volumes:
+      - name: thanos-store-data
+        hostPath:
+          path: /var/lib/thanos/store
+          type: DirectoryOrCreate

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: thanos
+    thanos-component: thanos-querier
+  name: thanos-querier
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thanos
+      thanos-component: thanos-querier
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thanos
+        thanos-component: thanos-querier
+    spec:
+      containers:
+      - args:
+        - query
+        - --query.replica-label=prometheus_replica
+        - --grpc-address=0.0.0.0:10901
+        - --http-address=0.0.0.0:9090
+        - --store=dnssrv+_grpc._tcp.thanos-store.monitoring.svc.cluster.local
+        - --store=dnssrv+_grpc._tcp.prometheus-k8s.monitoring.svc.cluster.local
+        image: quay.io/thanos/thanos:v0.9.0
+        livenessProbe:
+          failureThreshold: 4
+          httpGet:
+            path: /-/healthy
+            port: http
+            scheme: HTTP
+          periodSeconds: 30
+        name: thanos-querier
+        ports:
+        - containerPort: 10901
+          name: grpc
+        - containerPort: 9090
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64
+      terminationGracePeriodSeconds: 120

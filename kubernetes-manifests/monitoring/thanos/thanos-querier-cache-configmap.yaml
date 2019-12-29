@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: thanos
+    thanos-component: thanos-querier-cache
+  name: cortex-querier-cache
+  namespace: monitoring
+data:
+  cortex-cache-conf.yaml: |-
+    auth_enabled: false
+    target: query-frontend
+    http_prefix:
+    server:
+      http_listen_port: 9090
+    query_range:
+      split_queries_by_day: true
+      align_queries_with_step: true
+      cache_results: true
+      results_cache:
+        max_freshness: 1m
+        cache:
+          memcached:
+            expiration: 24h
+          memcached_client:
+            host: memcached.monitoring.svc.cluster.local
+            service: memcache
+            consistent_hash: true
+    frontend:
+      log_queries_longer_than: 5s
+      compress_responses: true

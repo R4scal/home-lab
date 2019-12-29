@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: thanos
+    thanos-component: thanos-compactor
+  name: thanos-compactor
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thanos
+      thanos-component: thanos-compactor
+  serviceName: thanos-compactor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thanos
+        thanos-component: thanos-compactor
+    spec:
+      containers:
+      - args:
+        - compact
+        - --wait
+        - --retention.resolution-raw=15d
+        - --retention.resolution-5m=60d
+        - --retention.resolution-1h=365d
+        - --objstore.config=$(OBJSTORE_CONFIG)
+        - --data-dir=/var/lib/thanos/compactor
+        env:
+        - name: OBJSTORE_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: thanos-config
+              key: objstore-config
+        image: quay.io/thanos/thanos:v0.9.0
+        livenessProbe:
+          failureThreshold: 4
+          httpGet:
+            path: /-/healthy
+            port: http
+            scheme: HTTP
+          periodSeconds: 30
+        name: thanos-compactor
+        ports:
+        - containerPort: 10902
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 2Gi
+        volumeMounts:
+        - mountPath: /var/lib/thanos/compactor
+          name: thanos-compactor-data
+          readOnly: false
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64
+      terminationGracePeriodSeconds: 120
+      volumes:
+      - emptyDir: {}
+        name: thanos-compactor-data
