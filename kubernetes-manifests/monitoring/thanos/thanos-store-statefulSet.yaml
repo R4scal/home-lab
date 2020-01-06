@@ -55,7 +55,10 @@ spec:
           periodSeconds: 30
         resources:
           requests:
-            cpu: 250m
+            cpu: 100m
+            memory: 2Gi
+          limits:
+            cpu: 1000m
             memory: 2Gi
         volumeMounts:
         - mountPath: /var/lib/thanos/store

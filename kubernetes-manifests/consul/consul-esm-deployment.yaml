@@ -6,7 +6,7 @@ metadata:
   name: consul-esm
   namespace: consul
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: consul-esm
@@ -24,11 +24,11 @@ spec:
         name: consul-esm
         resources:
           limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
             cpu: 100m
-            memory: 128Mi
+            memory: 32Mi
+          requests:
+            cpu: 20m
+            memory: 32Mi
         env:
         - name: HOST_IP
           valueFrom:

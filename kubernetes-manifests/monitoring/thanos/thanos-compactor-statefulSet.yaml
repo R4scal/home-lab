@@ -55,8 +55,11 @@ spec:
           periodSeconds: 30
         resources:
           requests:
-            cpu: 100m
-            memory: 2Gi
+            cpu: 10m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
         volumeMounts:
         - mountPath: /var/lib/thanos/compactor
           name: thanos-compactor-data

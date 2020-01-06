@@ -26,8 +26,11 @@ spec:
         name: cortex-querier-cache
         resources:
           requests:
-            cpu: 100m
-            memory: 2Gi
+            cpu: 50m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
         ports:
         - containerPort: 9000
           name: http

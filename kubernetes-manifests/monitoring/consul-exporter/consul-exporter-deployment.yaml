@@ -23,8 +23,8 @@ spec:
         name: consul-exporter
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 10m
+            memory: 32Mi
         ports:
         - containerPort: 9107
           name: http

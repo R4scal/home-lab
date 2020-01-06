@@ -86,8 +86,8 @@ spec:
             port: http
         resources:
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 25m
+            memory: 64Mi
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-data

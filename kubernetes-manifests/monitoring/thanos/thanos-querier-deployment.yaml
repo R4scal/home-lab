@@ -49,8 +49,11 @@ spec:
           periodSeconds: 30
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 50m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
       nodeSelector:
         kubernetes.io/os: linux
         kubernetes.io/arch: amd64
