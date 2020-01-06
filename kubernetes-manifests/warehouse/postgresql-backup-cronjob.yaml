@@ -1,0 +1,52 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: postgresql-backup
+  namespace: warehouse
+spec:
+  schedule: "0 17 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - command: 
+            - /bin/sh
+            args:
+            - -c
+            - |
+              /usr/local/bin/wal-g \
+              backup-push \
+              --config \
+              /var/lib/postgresql/wal-g/.walg.json \
+              /data/db \
+              && \
+              /usr/local/bin/wal-g \
+              delete \
+              retain FIND_FULL 5 \
+              --config \
+              /var/lib/postgresql/wal-g/.walg.json \
+              --confirm
+            name: wal-g-backup
+            image: "rascal/postgres:12.1-0.2.14"
+            imagePullPolicy: Always
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+            volumeMounts:
+            - name: postgresql-data
+              mountPath: /data
+            - name: wal-g
+              mountPath: /var/lib/postgresql/wal-g
+          nodeSelector:
+            kubernetes.io/arch: amd64 
+          volumes:
+          - name: wal-g
+            secret:
+              secretName: wal-g-config
+          - name: postgresql-data
+            hostPath:
+              path: /var/lib/postgresql/12
+              type: DirectoryOrCreate
+          restartPolicy: OnFailure
