@@ -20,8 +20,8 @@ spec:
         name: pgadmin
         resources:
           requests:
-            cpu: 200m
-            memory: 512Mi
+            cpu: 50m
+            memory: 128Mi
         ports:
         - containerPort: 8000
           name: http
