@@ -1,0 +1,31 @@
+---
+- hosts: k8s-workers-arm:k8s-masters
+  become: yes
+  tasks:
+    - copy:
+        src: "{{ playbook_dir }}/files/prom-rpi-exporter.sh"
+        dest: "/usr/local/bin/prom-rpi-exporter.sh"
+        mode: 0755
+    - copy:
+        src: "{{ playbook_dir }}/files/prom-rpi-exporter.service"
+        dest: "/etc/systemd/system/prom-rpi-exporter.service"
+        mode: 0644
+      notify:
+      - systemd-reload
+    - copy:
+        src: "{{ playbook_dir }}/files/prom-rpi-exporter.timer"
+        dest: "/etc/systemd/system/prom-rpi-exporter.timer"
+        mode: 0644
+      notify:
+      - systemd-reload
+    - name: Force all notified handlers to run at this point
+      meta: flush_handlers
+    - name: enable a timer for prom-rpi-exporter
+      systemd:
+        name: prom-rpi-exporter.timer
+        state: started
+        enabled: yes
+  handlers:
+    - name: systemd-reload
+      systemd:
+        daemon_reload: yes

@@ -1,0 +1,6 @@
+[Unit]
+Description=Collect Raspberry Pi metrics for Prometheus
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/prom-rpi-exporter.sh

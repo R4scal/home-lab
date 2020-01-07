@@ -1,0 +1,4 @@
+---
+- name: Extended monitoring
+  import_playbook: playbooks/extended-monitoring.yml
+
