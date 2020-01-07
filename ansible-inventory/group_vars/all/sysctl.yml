@@ -1,0 +1,137 @@
+sysctl_tunables:
+  - name: vm.swappiness
+    value: 1
+  - name: vm.overcommit_memory
+    value: 1
+  - name: vm.overcommit_ratio
+    value: 100
+  - name: vm.max_map_count
+    value: 262144
+  - name: vm.min_free_kbytes
+    value: "{{ [ 4194304 , (ansible_memtotal_mb * 1024 * 0.02) | round(0,'floor') | int ] | min }}"
+  - name: vm.dirty_ratio
+    value: 6
+  - name: vm.dirty_background_ratio
+    value: 3
+  - name: vm.vfs_cache_pressure
+    value: 100
+  - name: kernel.dmesg_restrict
+    value: 1
+  - name: kernel.msgmnb
+    value: 65536
+  - name: kernel.msgmax
+    value: 65536
+  - name: kernel.msgmni
+    value: 32000
+  - name: kernel.shmmax
+    value: '{{ ((ansible_memtotal_mb * 1024 * 1024) - 8192) | int }}'
+  - name: kernel.shmall
+    value: '{{ (((ansible_memtotal_mb * 1024 * 1024) - 8192) / 4096) | int }}'
+  - name: kernel.shmmni
+    value: 4096
+  - name: kernel.sem
+    value: "250 32000 250 128"
+  - name: kernel.randomize_va_space
+    value: 2
+  - name: net.ipv6.conf.all.disable_ipv6
+    value: 1
+  - name: net.ipv6.conf.default.disable_ipv6
+    value: 1
+  - name: net.ipv4.ip_local_port_range
+    value: "9000 65535"
+  - name: net.ipv4.icmp_ratelimit
+    value: 500
+  - name: net.core.somaxconn
+    value: 4096
+  - name: net.ipv4.conf.default.accept_redirects
+    value: 0
+  - name: net.ipv4.conf.all.accept_redirects
+    value: 0
+  - name: net.ipv4.conf.default.accept_source_route
+    value: 0
+  - name: net.ipv4.conf.all.accept_source_route
+    value: 0
+  - name: net.ipv4.conf.default.secure_redirects
+    value: 0
+  - name: net.ipv4.conf.all.secure_redirects
+    value: 0
+  - name: net.ipv4.conf.default.send_redirects
+    value: 0
+  - name: net.ipv4.conf.all.send_redirects
+    value: 0
+  - name: net.ipv4.tcp_syncookies
+    value: 1
+  - name: net.ipv4.ip_forward
+    value: 1
+  - name: net.ipv4.conf.all.log_martians
+    value: 1
+  - name: net.ipv4.conf.default.log_martians
+    value: 1
+  - name: net.ipv4.conf.all.rp_filter
+    value: 1
+  - name: net.ipv4.conf.default.rp_filter
+    value: 1
+  - name: net.ipv4.tcp_max_syn_backlog
+    value: 4096
+  - name: net.ipv4.tcp_timestamps
+    value: 1
+  - name: net.ipv4.tcp_sack
+    value: 1
+  - name: net.ipv4.tcp_fack
+    value: 1
+  - name: net.ipv4.tcp_window_scaling
+    value: 1
+  - name: net.ipv4.tcp_adv_win_scale
+    value: 1
+  - name: net.ipv4.tcp_rfc1337
+    value: 0
+  - name: net.ipv4.tcp_slow_start_after_idle
+    value: 0
+  - name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: 1
+  - name: net.ipv4.icmp_echo_ignore_broadcasts
+    value: 1
+  - name: net.ipv4.tcp_synack_retries
+    value: 2
+  - name: net.ipv4.tcp_fin_timeout
+    value: 10
+  - name: net.ipv4.tcp_max_orphans
+    value: 2000
+  - name: net.ipv4.tcp_keepalive_probes
+    value: 6
+  - name: net.ipv4.tcp_keepalive_intvl
+    value: 10
+  - name: net.ipv4.tcp_keepalive_time
+    value: 60
+  - name: net.ipv4.tcp_low_latency
+    value: 1
+  - name: net.ipv4.tcp_fastopen
+    value: 3
+  - name: net.ipv4.tcp_retries2
+    value: 5
+  - name: net.ipv4.tcp_rmem
+    value: "4096 1048576 2097152"
+  - name: net.ipv4.tcp_wmem
+    value: "4096 1048576 2097152"
+  - name: net.ipv4.tcp_no_metrics_save
+    value: 1
+  - name: net.ipv4.tcp_congestion_control
+    value: "htcp"
+  - name: net.core.netdev_max_backlog
+    value: 2500
+  - name: net.core.netdev_budget
+    value: 600
+  - name: net.core.netdev_budget_usecs
+    value: 4000
+  - name: net.core.dev_weight
+    value: 128
+  - name: net.ipv4.ip_early_demux
+    value: 0
+  - name: net.core.default_qdisc
+    value: fq_codel
+  - name: net.ipv4.neigh.default.gc_thresh1
+    value: 2048
+  - name: net.ipv4.neigh.default.gc_thresh2
+    value: 4096
+  - name: net.ipv4.neigh.default.gc_thresh3
+    value: 8192

@@ -1,0 +1,17 @@
+- name: Ensure /etc/security/limits.d is present
+  file:
+    path: "/etc/security/limits.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+- name: Ensure limits are present
+  pam_limits:
+    domain: "{{ item.domain | default(omit) }}"
+    limit_item: "{{ item.limit_item | default(omit) }}"
+    dest: /etc/security/limits.d/99-custom.conf
+    limit_type: "{{ item.limit_type | default('hard') }}"
+    value: "{{ item.value | default(omit) }}"
+    comment: "{{ item.comment | default(omit) }}"
+  with_items:
+   - "{{ limits_tunables }}"

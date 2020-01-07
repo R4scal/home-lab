@@ -1,0 +1,9 @@
+- name: Ensure sysctl parameters are present
+  sysctl:
+    name: "{{ item.name | default(omit) }}"
+    value: "{{ item.value | default(omit) }}"
+    sysctl_file: "/etc/sysctl.d/99-custom.conf"
+    state: "{{ item.state | default('present') }}"
+    sysctl_set: "{{ item.set | default('yes') }}"
+  with_items: 
+    - "{{ sysctl_tunables }}"

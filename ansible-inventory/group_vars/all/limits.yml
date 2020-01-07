@@ -1,0 +1,33 @@
+limits_tunables:
+  - domain: '*'
+    limit_item: nofile
+    limit_type: soft
+    value: 1048576
+  - domain: '*'
+    limit_item: nofile
+    limit_type: hard
+    value: 1048576
+  - domain: root
+    limit_item: nofile
+    limit_type: soft
+    value: 1048576
+  - domain: root
+    limit_item: nofile
+    limit_type: hard
+    value: 1048576
+  - domain: '*'
+    limit_item: memlock
+    limit_type: soft
+    value: unlimited
+  - domain: '*'
+    limit_item: memlock
+    limit_type: hard
+    value: unlimited
+  - domain: '*'
+    limit_item: nproc
+    limit_type: soft
+    value: 32000
+  - domain: '*'
+    limit_item: nproc
+    limit_type: hard
+    value: 64000

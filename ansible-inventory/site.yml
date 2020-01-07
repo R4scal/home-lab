@@ -1,4 +1,5 @@
 ---
+- name: Apply os tunables
+  import_playbook: playbooks/performance-tuning.yml
 - name: Extended monitoring
   import_playbook: playbooks/extended-monitoring.yml
-

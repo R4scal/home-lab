@@ -1,0 +1,6 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: sysctl, tags: [sysctl] }
+    - { role: limits, tags: [limits] }
