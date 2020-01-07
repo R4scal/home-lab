@@ -22,14 +22,16 @@ spec:
         - --path.rootfs=/host/root
         - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
         - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+        - --collector.netdev.ignored-devices=^veth.+$
+        - --collector.textfile.directory=/var/lib/node-exporter
         image: quay.io/prometheus/node-exporter:v0.18.1
         name: node-exporter
         resources:
           limits:
-            cpu: 250m
+            cpu: 1000m
             memory: 180Mi
           requests:
-            cpu: 102m
+            cpu: 50m
             memory: 180Mi
         volumeMounts:
         - mountPath: /host/proc
@@ -42,6 +44,8 @@ spec:
           mountPropagation: HostToContainer
           name: root
           readOnly: true
+        - mountPath: /var/lib/node-exporter
+          name: textfile-dir
       - args:
         - --logtostderr
         - --secure-listen-address=[$(IP)]:9100
@@ -85,3 +89,7 @@ spec:
       - hostPath:
           path: /
         name: root
+      - hostPath:
+          path: /var/lib/node-exporter
+          type: DirectoryOrCreate
+        name: textfile-dir
