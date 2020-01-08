@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: network-tools
+  name: powerdns
+  labels:
+    app.kubernetes.io/name: powerdns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: powerdns
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: powerdns
+    spec:
+      containers:
+        - name: pdns-auth
+          image: "rascal/pdns-auth:4.2.1-r1"
+          ports:
+            - name: dns-udp
+              containerPort: 1053
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 1053
+              protocol: TCP
+            - name: api
+              containerPort: 8081
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/powerdns.d/
+              readOnly: true
+      volumes:
+        - name: config-volume
+          secret:
+            secretName: powerdns-config
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

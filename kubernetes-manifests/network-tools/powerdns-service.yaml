@@ -1,0 +1,33 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: powerdns-api
+  namespace: network-tools
+  labels:
+    app.kubernetes.io/name: powerdns
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: powerdns
+  ports:
+    - name: http
+      port: 8081
+      protocol: TCP
+      targetPort: api
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: powerdns-dns
+  namespace: network-tools
+  labels:
+    app.kubernetes.io/name: powerdns
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: powerdns
+  ports:
+    - name: dns-udp
+      port: 53
+      protocol: UDP
+      targetPort: dns-udp

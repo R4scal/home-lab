@@ -98,3 +98,7 @@ spec:
             name: unbound-config
         - name: control-volume
           emptyDir: {}
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

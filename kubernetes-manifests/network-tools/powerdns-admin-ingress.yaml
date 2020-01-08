@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: powerdns-admin-ingress
+  namespace: network-tools
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`powerdns-admin.rascal.local`)
+    kind: Rule
+    services:
+    - name: powerdns-admin
+      port: 80
+      scheme: http

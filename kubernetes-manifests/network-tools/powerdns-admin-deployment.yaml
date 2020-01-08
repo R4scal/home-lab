@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: network-tools
+  name: powerdns-admin
+  labels:
+    app.kubernetes.io/name: powerdns-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: powerdns-admin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: powerdns-admin
+    spec:
+      containers:
+        - name: powerdns-admin
+          image: "rascal/powerdns-admin:v0.2.1"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+          - name: SQLALCHEMY_DATABASE_URI
+            valueFrom:
+              secretKeyRef:
+                name: powerdns-admin-config
+                key: database_uri
+          - name: GUINCORN_TIMEOUT
+            value: "60"
+          - name: GUNICORN_WORKERS
+            value: "2"
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

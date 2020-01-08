@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: powerdns-admin
+  namespace: network-tools
+  labels:
+    app.kubernetes.io/name: powerdns-admin
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: powerdns-admin
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
