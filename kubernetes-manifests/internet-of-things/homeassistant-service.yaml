@@ -6,6 +6,7 @@ metadata:
   name: home-assistant
   namespace: internet-of-things
 spec:
+  clusterIP: None
   ports:
   - name: api
     port: 8123

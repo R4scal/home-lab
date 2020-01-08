@@ -6,6 +6,7 @@ metadata:
   name: pgadmin-http
   namespace: warehouse
 spec:
+  clusterIP: None
   ports:
   - name: http
     port: 80

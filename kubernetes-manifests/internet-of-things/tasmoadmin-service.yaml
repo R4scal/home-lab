@@ -6,6 +6,7 @@ metadata:
   name: tasmoadmin
   namespace: internet-of-things
 spec:
+  clusterIP: None
   ports:
   - name: http
     port: 80
