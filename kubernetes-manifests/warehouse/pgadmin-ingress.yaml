@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pgadmin-ingress
+  namespace: warehouse
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`pgadmin.rascal.local`)
+    kind: Rule
+    services:
+    - name: pgadmin-http
+      port: 80
+      scheme: http

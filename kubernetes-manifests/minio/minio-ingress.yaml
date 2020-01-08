@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-ingress
+  namespace: minio
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`minio.rascal.local`)
+    kind: Rule
+    services:
+    - name: minio-nas
+      port: 9000
+      scheme: http

@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tasmoadmin-ingress
+  namespace: internet-of-things
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`tasmoadmin.rascal.local`)
+    kind: Rule
+    services:
+    - name: tasmoadmin
+      port: 80
+      scheme: http
