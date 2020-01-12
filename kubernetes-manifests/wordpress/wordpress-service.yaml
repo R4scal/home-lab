@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/component: php-fpm
+  name: wordpress
+  namespace: wordpress
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: php-metrics
+    port: 8080
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: wordpress

@@ -34,12 +34,10 @@ spec:
               name: dev-tty
           securityContext:
             privileged: true
-      tolerations:
-      - key: "hardware/zigbee"
-        operator: Exists
-        effect: "NoSchedule"
       nodeSelector:
-        "kubernetes.io/arch": "arm"
+        kubernetes.io/os: linux
+        kubernetes.io/arch: arm
+        hardware/usb: zigbee
       volumes:
         - name: zigbee2mqtt-data
           persistentVolumeClaim:

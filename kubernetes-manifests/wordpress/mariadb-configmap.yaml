@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: mariadb
+  name: mariadb-config
+  namespace: wordpress
+data:
+  common.cnf: |-
+    [mysqld]
+    max_connections=100
+    thread_cache_size=100
+    query_cache_size=0
+    query_cache_type=0
+    thread_handling=pool-of-threads
+    performance_schema=ON
+  storage_aria.cnf: |-
+    [mysqld]
+    aria_pagecache_buffer_size=4M
+  storage_innodb.cnf: |-
+    [mysqld]
+    innodb_buffer_pool_size=256M
+    innodb_buffer_pool_instances=1
+    innodb_log_file_size=32M
+    innodb_log_files_in_group=2
+    innodb_flush_method=O_DIRECT
+    innodb_compression_algorithm=lz4
+    innodb_compression_default=ON
+    innodb_file_per_table=ON
+  storage_myisam.cnf: |-
+    [mysqld]
+    key_buffer_size=4M

@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mariadb
+  labels:
+    k8s-app: mariadb
+  namespace: wordpress
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mariadb
+  endpoints:
+  - port: metrics
+    interval: 30s

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-data-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+    - timeo=60
+    - retrans=10
+  capacity:
+    storage: 50Gi
+  nfs:
+    server: ""
+    path: ""
+  persistentVolumeReclaimPolicy: "Retain"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-data-pvc
+  namespace: wordpress
+spec:
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: "wordpress-data-pv"
+  storageClassName: ""

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+  namespace: wordpress
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mariadb
+  serviceName: "mariadb"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mariadb
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysqld-exporter
+        args:
+        - --collect.info_schema.innodb_metrics
+        - --collect.info_schema.tables
+        - --collect.info_schema.tablestats
+        - --collect.info_schema.userstats
+        - --collect.perf_schema.eventswaits
+        - --collect.perf_schema.file_events
+        - --collect.perf_schema.indexiowaits
+        - --collect.perf_schema.tableiowaits
+        - --collect.perf_schema.tablelocks
+        image: "prom/mysqld-exporter:master"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9104
+          name: http
+        env:
+          - name: USER
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: mon-user
+          - name: PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: mon-passwd
+          - name: DATA_SOURCE_NAME
+            value: $(USER):$(PASSWORD)@(127.0.0.1:3306)/
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+      - name: mariadb
+        image: "mariadb:10.4.11"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: root-passwd
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: user-db
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: user-name
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-creds
+                key: user-passwd
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+        volumeMounts:
+        - name: mariadb-config
+          mountPath: /etc/mysql/conf.d
+        - name: mariadb-data
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64 
+      volumes:
+        - name: mariadb-config
+          configMap:
+            name: mariadb-config
+        - name: mariadb-data
+          hostPath:
+           path: /var/lib/mariadb/10
+           type: DirectoryOrCreate

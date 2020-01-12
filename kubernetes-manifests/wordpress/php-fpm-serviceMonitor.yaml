@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: php-fpm
+  labels:
+    k8s-app: php-fpm
+  namespace: wordpress
+spec:
+  jobLabel: app.kubernetes.io/component
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: php-fpm
+  endpoints:
+  - port: php-metrics
+    interval: 30s
