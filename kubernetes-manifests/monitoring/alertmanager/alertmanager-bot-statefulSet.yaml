@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: alertmanager-bot
+  name: alertmanager-bot
+  namespace: monitoring
+spec:
+  replicas: 1
+  serviceName: alertmanager-bot
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager-bot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alertmanager-bot
+    spec:
+      containers:
+      - name: alertmanager-bot
+        image: rascal/alertmanager-bot:v0.4.2
+        env:
+        - name: ALERTMANAGER_URL
+          value: "http://alertmanager-main.monitoring.svc.cluster.local:9093"
+        - name: STORE
+          value: "consul"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CONSUL_URL
+          value: "$(NODE_NAME).rascal.local:8500"
+        - name: TELEGRAM_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: alertmanager-bot-config
+              key: admin
+        - name: TELEGRAM_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: alertmanager-bot-config
+              key: token
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 128Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

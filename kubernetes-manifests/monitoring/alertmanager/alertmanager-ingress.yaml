@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: alertmanager-main-ingress
+  namespace: monitoring
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`alertmanager.rascal.local`)
+    kind: Rule
+    services:
+    - name: alertmanager-main
+      port: 9093
+      scheme: http
