@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: consul-exporter
+  labels:
+    k8s-app: consul-exporter
+  namespace: consul
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: consul-exporter
+  endpoints:
+  - port: http
+    path: /metrics

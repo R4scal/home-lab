@@ -4,12 +4,9 @@ metadata:
   name: minio-nas
   labels:
     k8s-app: minio
-  namespace: monitoring
+  namespace: minio
 spec:
   jobLabel: app.kubernetes.io/name
-  namespaceSelector:
-    matchNames:
-    - minio
   selector:
     matchLabels:
       app.kubernetes.io/name: minio

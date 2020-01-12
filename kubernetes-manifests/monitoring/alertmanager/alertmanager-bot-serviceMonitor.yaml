@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: alertmanager-bot
+  name: alertmanager-bot
+  namespace: monitoring
+spec:
+  jobLabel: app.kubernetes.io/name
+  endpoints:
+  - interval: 30s
+    port: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager-bot

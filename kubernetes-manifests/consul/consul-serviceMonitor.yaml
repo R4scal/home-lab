@@ -4,12 +4,9 @@ metadata:
   name: consul
   labels:
     k8s-app: consul
-  namespace: monitoring
+  namespace: consul
 spec:
   jobLabel: k8s-app
-  namespaceSelector:
-    matchNames:
-    - consul
   selector:
     matchLabels:
       k8s-app: consul

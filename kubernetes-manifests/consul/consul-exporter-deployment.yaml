@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: consul-exporter
   name: consul-exporter
-  namespace: monitoring
+  namespace: consul
 spec:
   replicas: 1
   selector:
@@ -24,7 +24,10 @@ spec:
         resources:
           requests:
             cpu: 10m
-            memory: 32Mi
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 64Mi
         ports:
         - containerPort: 9107
           name: http

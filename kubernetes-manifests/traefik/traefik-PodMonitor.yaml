@@ -4,12 +4,9 @@ metadata:
   name: traefik
   labels:
     k8s-app: traefik
-  namespace: monitoring
+  namespace: traefik
 spec:
   jobLabel: app.kubernetes.io/name
-  namespaceSelector:
-    matchNames:
-    - traefik
   selector:
     matchLabels:
       app.kubernetes.io/name: traefik
