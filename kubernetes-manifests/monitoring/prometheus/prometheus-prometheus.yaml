@@ -28,7 +28,7 @@ spec:
             storage: 50Gi
   resources:
     requests:
-      cpu: 500m
+      cpu: 250m
       memory: 512Mi
   ruleSelector:
     matchLabels:
@@ -48,10 +48,10 @@ spec:
     key: prometheus-additional.yaml
   version: v2.15.2
   thanos:
-    image: "quay.io/thanos/thanos:v0.9.0"
+    image: "quay.io/thanos/thanos:v0.10.0"
     resources:
       requests:
-        cpu: 100m
+        cpu: 10m
         memory: 64Mi
     objectStorageConfig:
       name: thanos-config
