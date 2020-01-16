@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: grafana
     spec:
       containers:
-      - image: grafana/grafana:6.5.2
+      - image: grafana/grafana:6.5.3
         name: grafana
         ports:
         - containerPort: 3000
@@ -80,6 +80,8 @@ spec:
             value: "8"
           - name: GF_DATABASE_CONN_MAX_LIFETIME
             value: "1800"
+          - name: GF_INSTALL_PLUGINS
+            value: "fetzerch-sunandmoon-datasource,grafana-piechart-panel,grafana-simple-json-datasource,raintank-worldping-app"
         readinessProbe:
           httpGet:
             path: /api/health
