@@ -24,7 +24,7 @@ spec:
   entryPoints:
     - ssh
   routes:
-  - match: HostSNI(`git.rascal.local`)
+  - match: HostSNI(`*`)
     services:
     - name: gitea
       port: 22

@@ -54,6 +54,10 @@ spec:
               value: "true"
             - name: REQUIRE_SIGNIN_VIEW
               value: "true"
+            - name: USER_UID
+              value: "1024"
+            - name: USER_GID
+              value: "100"
           resources:
             requests:
               cpu: 25m
