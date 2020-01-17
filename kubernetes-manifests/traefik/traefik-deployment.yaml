@@ -32,7 +32,10 @@ spec:
             - --entryPoints.https.forwardedHeaders.trustedIPs=$(CLOUDFLARE_IPS)
             - --providers.kubernetescrd
             - --serversTransport.insecureSkipVerify=true
+            - --entrypoints.ssh.address=:2222
           ports:
+            - name: ssh
+              containerPort: 2222
             - name: http
               containerPort: 8000
             - name: https

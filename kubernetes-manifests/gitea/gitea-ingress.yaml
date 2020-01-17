@@ -1,0 +1,30 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gitea-ingress
+  namespace: gitea
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`git.rascal.local`)
+    kind: Rule
+    services:
+    - name: gitea
+      port: 3000
+      scheme: http
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: gitea-ingress-ssh
+  namespace: gitea
+spec:
+  entryPoints:
+    - ssh
+  routes:
+  - match: HostSNI(`git.rascal.local`)
+    services:
+    - name: gitea
+      port: 22
