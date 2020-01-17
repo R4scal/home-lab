@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: zigbee2mqtt
-          image: "koenkk/zigbee2mqtt:1.8.0"
+          image: "koenkk/zigbee2mqtt:1.9.0"
           resources:
             limits:
               cpu: 250m
