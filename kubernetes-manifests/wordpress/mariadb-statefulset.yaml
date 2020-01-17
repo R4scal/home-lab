@@ -18,6 +18,7 @@ spec:
       containers:
       - name: mysqld-exporter
         args:
+        - --collect.info_schema.clientstats
         - --collect.info_schema.innodb_metrics
         - --collect.info_schema.tables
         - --collect.info_schema.tablestats
