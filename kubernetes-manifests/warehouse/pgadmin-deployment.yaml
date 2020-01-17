@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: pgadmin
     spec:
       containers:
-      - image: "dpage/pgadmin4:4.16"
+      - image: "dpage/pgadmin4:4.17"
         name: pgadmin
         resources:
           requests:
