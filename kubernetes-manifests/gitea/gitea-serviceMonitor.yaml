@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gitea
+  labels:
+    k8s-app: gitea
+  namespace: gitea
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gitea
+  endpoints:
+  - port: http
+    interval: 30s

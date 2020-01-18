@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: drone-server
+  labels:
+    k8s-app: drone-server
+  namespace: drone
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: drone
+      app.kubernetes.io/component: server
+  endpoints:
+  - port: http
+    interval: 30s
+    bearerTokenSecret: 
+      name: drone-secrets
+      key: prometheus-token

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drone-runner
+  namespace: drone
+  labels:
+    app.kubernetes.io/name: drone
+    app.kubernetes.io/component: runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: drone
+      app.kubernetes.io/component: runner
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: drone
+        app.kubernetes.io/component: runner
+    spec:
+      serviceAccountName: drone-runner
+      containers:
+      - name: drone-runner
+        image: drone/drone-runner-kube:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        env:
+        - name: GOMAXPROCS
+          value: "1"
+        - name: DRONE_NAMESPACE_DEFAULT
+          value: "drone"
+        - name: DRONE_RUNNER_MAX_PROCS
+          value: "1"
+        - name: DRONE_RPC_HOST
+          valueFrom:
+            secretKeyRef:
+              name: drone-secrets
+              key: SERVER_HOST
+        - name: DRONE_RPC_PROTO
+          value: http
+        - name: DRONE_RPC_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: drone-secrets
+              key: RPC_SECRET
+        - name: DRONE_UI_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: drone-secrets
+              key: ui-user
+        - name: DRONE_UI_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drone-secrets
+              key: ui-passwd

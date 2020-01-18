@@ -1,0 +1,117 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: drone
+  name: drone-server
+  labels:
+    app.kubernetes.io/name: drone
+    app.kubernetes.io/component: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: drone
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: drone
+        app.kubernetes.io/component: server
+    spec:
+      containers:
+        - name: drone-server
+          image: "rascal/drone-server:v1.6.4"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: DRONE_DATABASE_DRIVER
+              value: "postgres"
+            - name: DRONE_DATABASE_DATASOURCE
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: db-conn-string
+            - name: DRONE_DATABASE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: db-secret
+            - name: DRONE_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: s3-bucket
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: s3-access-key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: s3-secret-key
+            - name: AWS_S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: s3-endpoint
+            - name: AWS_S3_USE_PATH_STYLE_ENDPOINT
+              value: "true"
+            - name: DRONE_GITEA_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: GITEA_CLIENT_ID
+            - name: DRONE_GITEA_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: GITEA_CLIENT_SECRET
+            - name: DRONE_GITEA_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: GITEA_SERVER
+            - name: DRONE_RPC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: RPC_SECRET
+            - name: DRONE_SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: drone-secrets
+                  key: SERVER_HOST
+            - name: DRONE_GIT_ALWAYS_AUTH
+              value: "true"
+            - name: DRONE_SERVER_PROTO
+              value: "http"
+            - name: DRONE_AGENTS_ENABLED
+              value: "true"
+#            - name: DRONE_LOGS_DEBUG
+#              value: "true"
+#            - name: DRONE_LOGS_TEXT
+#              value: "true"
+#            - name: DRONE_LOGS_PRETTY
+#              value: "true"
+          resources:
+            requests:
+              cpu: 25m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi
+          volumeMounts:
+          - name: drone-data
+            mountPath: /data
+      volumes:
+      - name: drone-data
+        persistentVolumeClaim:
+          claimName: drone-data-pvc
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"

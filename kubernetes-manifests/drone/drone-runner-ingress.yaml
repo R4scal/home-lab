@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: drone-runner-ingress
+  namespace: drone
+spec:
+  entryPoints:
+    - http
+  routes:
+  - match: Host(`drone-runner.rascal.local`)
+    kind: Rule
+    services:
+    - name: drone-runner
+      port: 3000
+      scheme: http
