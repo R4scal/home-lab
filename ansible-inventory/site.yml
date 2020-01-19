@@ -1,4 +1,6 @@
 ---
+- name: Common settings
+  import_playbook: playbooks/common.yml
 - name: Apply os tunables
   import_playbook: playbooks/performance-tuning.yml
 - name: Extended monitoring

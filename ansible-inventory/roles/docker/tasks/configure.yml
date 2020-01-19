@@ -1,0 +1,8 @@
+- name: Configure daemon.json
+  template:
+    src: "daemon.json.j2"
+    dest: /etc/docker/daemon.json
+    mode: 0644
+    owner: root
+    group: root
+  notify: docker reload

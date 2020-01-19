@@ -1,0 +1,12 @@
+journald_storage: persistent
+journald_compress: "yes"
+journald_forward_syslog: "no"
+journald_system_max_use: 50M
+journald_system_max_filesize: 10M
+
+systemd_log_level: info
+systemd_defult_cpu_accounting: "yes"
+systemd_defult_mem_accounting: "yes"
+systemd_defult_tasks_accounting: "yes"
+
+systemd_services_blacklist: []

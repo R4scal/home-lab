@@ -1,0 +1,5 @@
+apt_install_packages:
+  - python3-pip
+apt_blacklist:
+  - aufs-dkms
+  - aufs-tools

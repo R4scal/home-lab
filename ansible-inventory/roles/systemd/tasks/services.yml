@@ -1,0 +1,7 @@
+- name: blacklist services 
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+  loop: "{{ systemd_services_blacklist }}"

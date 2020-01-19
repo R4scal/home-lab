@@ -1,0 +1,10 @@
+resolv_nameservers:
+ - 192.168.3.2
+ - 192.168.3.1
+ - 1.1.1.1
+resolv_search:
+ - rascal.local
+resolv_options:
+ - timeout:1
+ - attempts:5
+resolv_systemd_enabled: false

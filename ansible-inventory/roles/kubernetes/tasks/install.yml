@@ -1,0 +1,22 @@
+- name: Setup apt key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Setup apt repository
+  apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    filename: kubernetes
+
+- name: Install packages
+  apt:
+    pkg: "{{ kubernetes_pkg_list }}"
+    state: present
+    install_recommends: no
+
+- name: Hold packages
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items: "{{ kubernetes_pkg_list }}"

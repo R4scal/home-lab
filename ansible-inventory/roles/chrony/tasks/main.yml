@@ -1,0 +1,27 @@
+---
+- name: Install the require packages in Debian derivatives
+  apt: name=chrony state={{ chrony_pkg_state }}
+
+- name: Copy the chrony.conf template file
+  template:
+    src: chrony.conf.j2
+    dest: "{{ chrony_config_location }}"
+    mode: "0644"
+    owner: root
+    group: root
+  notify:
+    - restart chrony
+
+- name: Start and enable chrony service
+  service:
+    name: "{{ chrony_service_name }}"
+    state: "{{ chrony_service_state }}"
+    enabled: "{{ chrony_service_enabled }}"
+
+- name: Ensure tzdata package is installed
+  package:
+    name: "{{ chrony_tzdata_package }}"
+    state: present
+
+- name: Set timezone
+  timezone: name="{{ chrony_timezone }}"

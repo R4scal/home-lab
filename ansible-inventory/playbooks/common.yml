@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: apt, tags: [apt] }
+    - { role: chrony, tags: [chrony] }
+    - { role: docker, tags: [docker] }
+    - { role: resolvconf, tags: [resolvconf] }
+    - { role: systemd, tags: [systemd] }
