@@ -55,15 +55,15 @@ spec:
         - --port=8081
         - --telemetry-host=127.0.0.1
         - --telemetry-port=8082
-        image: rascal/kube-state-metrics:v1.9.2
+        image: rascal/kube-state-metrics:v1.9.3
         name: kube-state-metrics
         resources:
           limits:
             cpu: 100m
-            memory: 150Mi
+            memory: 100Mi
           requests:
-            cpu: 50m
-            memory: 150Mi
+            cpu: 10m
+            memory: 100Mi
       nodeSelector:
         kubernetes.io/os: linux
       securityContext:
