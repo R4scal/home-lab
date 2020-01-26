@@ -1,0 +1,21 @@
+---
+- name: "Configure resolv.conf"
+  template:
+    src: "resolv.conf.j2"
+    dest: "/etc/resolv.conf"
+    mode: "0644"
+  become: True
+
+- name: "Enable system resolver"
+  systemd:
+    name: systemd-resolved
+    state: started
+    enabled: yes
+  when: resolv_systemd_enabled == true
+
+- name: "Disable system resolver"
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+  when: resolv_systemd_enabled == false

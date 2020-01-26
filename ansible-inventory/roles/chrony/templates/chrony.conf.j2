@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+
+# List of NTP servers to use.
+{% for server in chrony_config_server %}
+server {{ server }}
+{% endfor %}
+
+# Ignore stratum in source selection.
+stratumweight 0
+
+# Record the rate at which the system clock gains/losses time.
+driftfile {{ chrony_config_driftfile }}
+
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile {{ chrony_config_keyfile }}
+
+# Log files location.
+logdir {{ chrony_config_logdir }}
+
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 100.0
+
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it canât be used along with the 'rtcfile' directive.
+rtcsync
+
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 1 3

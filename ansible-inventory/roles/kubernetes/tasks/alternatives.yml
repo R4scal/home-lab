@@ -1,0 +1,19 @@
+- name: Correct iptables
+  alternatives:
+    name: iptables
+    path: /usr/sbin/iptables-legacy
+
+- name: Correct ip6tables
+  alternatives:
+    name: ip6tables
+    path: /usr/sbin/ip6tables-legacy
+
+#- name: correct arptables
+#  alternatives:
+#    name: arptables
+#    path: /usr/sbin/arptables-legacy
+
+- name: Correct ebtables
+  alternatives:
+    name: ebtables
+    path: /usr/sbin/ebtables-legacy

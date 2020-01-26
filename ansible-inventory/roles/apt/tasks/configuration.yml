@@ -1,0 +1,16 @@
+- name: disable install recomended and suggested
+  template:
+    src: 90suggested
+    dest: "/etc/apt/apt.conf.d/90suggested"
+
+- name: Disable automatic packages updates and upgrades
+  template:
+    src: apt-auto-upgrades
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    mode: 0644
+
+- name: blacklist apt packages
+  template:
+    src: apt.blacklist
+    dest: "/etc/apt/preferences.d/{{ item }}"
+  loop: "{{ apt_blacklist }}"

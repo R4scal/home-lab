@@ -1,0 +1,11 @@
+- name: Apt cache update
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    install_recommends: no 
+  loop: "{{ apt_install_packages }}"

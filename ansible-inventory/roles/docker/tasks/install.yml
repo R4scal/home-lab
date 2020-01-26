@@ -1,0 +1,29 @@
+- name: Setup apt key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Setup apt repository for arm
+  apt_repository:
+    repo: "deb [arch=armhf] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+    filename: docker
+  when: ansible_architecture == 'armv7l'
+
+- name: Setup apt repository for x86
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu/ {{ ansible_distribution_release }} stable"
+    state: present
+    filename: docker
+  when: ansible_architecture == 'x86_64'
+
+- name: Install docker package
+  apt:
+    pkg: docker-ce
+    state: present
+    install_recommends: no
+
+- name: Install python module for docker
+  pip:
+    name: docker
+    executable: pip3

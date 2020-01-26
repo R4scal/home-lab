@@ -1,0 +1,6 @@
+docker_experimental: "false"
+docker_storage_driver: overlay2
+docker_log_driver: json-file
+docker_log_max_size: 512k
+docker_log_max_file: 4
+docker_dns: 1.1.1.1

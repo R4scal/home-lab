@@ -1,0 +1,9 @@
+- name: journald reload
+  systemd:
+    name: systemd-journald
+    state: restarted
+    enabled: yes
+
+- name: systemd reload
+  systemd:
+    daemon_reexec: yes

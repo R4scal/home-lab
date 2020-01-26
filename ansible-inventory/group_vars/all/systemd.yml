@@ -1,0 +1,9 @@
+systemd_services_blacklist:
+  - accounts-daemon
+  - alsa-state
+  - avahi-daemon
+  - cups-browsed
+  - cups
+  - lvm2-lvmetad
+  - unattended-upgrades
+

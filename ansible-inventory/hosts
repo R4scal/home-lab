@@ -1,5 +1,6 @@
 [all:children]
 k8s
+runners
 
 [k8s:children]
 k8s-masters
@@ -22,6 +23,9 @@ rpi3b-node01.rascal.local
 rpi3b-node02.rascal.local
 rpi4b-node01.rascal.local
 rpi4b-node02.rascal.local
+
+[runners]
+runner.rascal.local
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

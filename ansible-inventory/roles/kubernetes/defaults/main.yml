@@ -1,0 +1,4 @@
+kubernetes_pkg_list:
+ - kubelet
+ - kubeadm
+ - kubectl
