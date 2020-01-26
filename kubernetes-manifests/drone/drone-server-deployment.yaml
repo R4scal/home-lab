@@ -38,28 +38,6 @@ spec:
                 secretKeyRef:
                   name: drone-secrets
                   key: db-secret
-            - name: DRONE_S3_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: drone-secrets
-                  key: s3-bucket
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: drone-secrets
-                  key: s3-access-key
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: drone-secrets
-                  key: s3-secret-key
-            - name: AWS_S3_ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  name: drone-secrets
-                  key: s3-endpoint
-            - name: AWS_S3_USE_PATH_STYLE_ENDPOINT
-              value: "true"
             - name: DRONE_GITEA_CLIENT_ID
               valueFrom:
                 secretKeyRef:
