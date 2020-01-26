@@ -48,7 +48,7 @@ spec:
       serviceAccount: kube-router
       containers:
       - name: kube-router
-        image: rascal/kube-router:v0.4.0-rc1
+        image: cloudnativelabs/kube-router:v0.4.0-rc2
         imagePullPolicy: IfNotPresent
         args:
         - --run-router=true
