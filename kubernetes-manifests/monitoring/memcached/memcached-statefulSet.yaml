@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: memcached
-        image: memcached:1.5.20-alpine
+        image: memcached:1.5.21-alpine
         command:
         - memcached
         - -m 128
