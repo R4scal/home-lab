@@ -20,8 +20,7 @@ spec:
     spec:
       containers:
         - name: drone-server
-          image: "rascal/drone-server:v1.6.4"
-          imagePullPolicy: Always
+          image: "rascal/drone-server:v1.6.5"
           ports:
             - name: http
               containerPort: 80
