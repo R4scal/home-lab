@@ -48,7 +48,7 @@ spec:
     key: prometheus-additional.yaml
   version: v2.15.2
   thanos:
-    image: "quay.io/thanos/thanos:v0.10.0"
+    image: "quay.io/thanos/thanos:v0.10.1"
     resources:
       requests:
         cpu: 10m
