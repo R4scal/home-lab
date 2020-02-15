@@ -46,7 +46,7 @@ spec:
   additionalScrapeConfigs:
     name: prometheus-scrape-configs
     key: prometheus-additional.yaml
-  version: v2.15.2
+  version: v2.16.0
   thanos:
     image: "quay.io/thanos/thanos:v0.10.1"
     resources:
