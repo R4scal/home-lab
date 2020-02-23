@@ -56,7 +56,7 @@ spec:
           - name: run
             mountPath: /run
         - name: php-fpm
-          image: rascal/php-fpm:v7.4.2
+          image: rascal/php-fpm:v7.4.3
           resources:
             limits:
               cpu: 1000m
