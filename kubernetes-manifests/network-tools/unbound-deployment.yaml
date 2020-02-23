@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
         - name: unbound-control-setup
-          image: "rascal/unbound:1.9.6"
+          image: "rascal/unbound:1.10.0"
           command:
            - /usr/sbin/unbound-control-setup
            - -d
@@ -29,7 +29,7 @@ spec:
               mountPath: /control
       containers:
         - name: unbound
-          image: "rascal/unbound:1.9.6"
+          image: "rascal/unbound:1.10.0"
           args:
           - -c
           - /config/unbound.conf
