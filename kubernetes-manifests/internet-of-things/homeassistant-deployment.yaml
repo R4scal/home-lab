@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
         - name: home-assistant
-          image: "homeassistant/home-assistant:0.105.4"
+          image: "homeassistant/home-assistant:0.105.5"
           imagePullPolicy: IfNotPresent
           ports:
             - name: api
