@@ -55,7 +55,7 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
         - name: home-assistant
-          image: "homeassistant/home-assistant:0.106.4"
+          image: "homeassistant/home-assistant:0.106.5"
           imagePullPolicy: IfNotPresent
           ports:
             - name: api
