@@ -59,7 +59,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 10
         - name: eclipse-mosquitto
-          image: "eclipse-mosquitto:1.6.8"
+          image: "eclipse-mosquitto:1.6.9"
           resources:
             limits:
               cpu: 250m
