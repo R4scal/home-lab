@@ -3,7 +3,7 @@
 Install cert-manager
 
 ```
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.13.1/cert-manager-no-webhook.yaml
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.14.0/cert-manager.yaml
 ```
 
 Use Letsencrypt with Cloudflare
