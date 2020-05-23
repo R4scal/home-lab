@@ -30,7 +30,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-prod
+  name: letsencrypt
   namespace: cert-manager
 spec:
   acme:
@@ -42,7 +42,7 @@ spec:
     - dns01:
         cloudflare:
           email: ${EMAIL_ADDRESS}
-          apiKeySecretRef:
+          apiTokenSecretRef:
             name: cloudflare-api-key
             key: api-key
 EOF
