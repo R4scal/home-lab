@@ -7,5 +7,6 @@ spec:
   secretName: k8s-dashboard-tls
   issuerRef:
     name: letsencrypt
+    kind: ClusterIssuer
   dnsNames:
   - k8s-dashboard
